@@ -1,16 +1,23 @@
+// Semester.h
 #ifndef SEMESTER_H
 #define SEMESTER_H
 
-#pragma once
+#include <vector>
+#include "Course.h"
+using namespace std;
 
-class Semester
-{
+class Semester {
 public:
-    Semester();
-    ~Semester();
+    Semester(int id,int CapacityofCourses);
+    int getId() const;
+    int getCapacityofCourses() const;
+    void addCourse(const Course& course);
+    const vector<Course>& getCourses() const;
 
 private:
-
+    int CapacityofCourses;
+    int id;
+    vector<Course> courses;
 };
 
 #endif
