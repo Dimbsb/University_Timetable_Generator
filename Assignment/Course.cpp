@@ -9,31 +9,29 @@
 using namespace std;
 
 Course::Course() {
-    id = ""; 
-    name = ""; 
+    id = "";
+    name = "";
     isLecture = false;
     isLab = false;
+    TeachingHours = 0;
 }
 
-
-Course::Course(string id, string name, bool isLecture, bool isLab) {
-    this->id = id;
-    this->name = name;
-    this->isLecture = isLecture;
-    this->isLab= isLab;
+Course::Course(string id, string name, bool isLecture, bool isLab, int TeachingHours) {
+    this -> id = id;
+    this -> name = name;
+    this -> isLecture = isLecture;
+    this -> isLab = isLab;
+    this -> TeachingHours = TeachingHours;
 
 }
 
+string Course::getId() const {
+    return id;
+}
 
-string Course::getId() const { 
-    return id; 
-    }
-
-
-string Course::getName() const { 
-    return name; 
-    }
-
+string Course::getName() const {
+    return name;
+}
 
 string Course::getType() const {
     if (isLecture && isLab)
@@ -45,5 +43,6 @@ string Course::getType() const {
     return "None";
 }
 
-
-
+int Course::getTeachinHours() const {
+    return TeachingHours;
+}
