@@ -19,12 +19,12 @@ int main() {
     vector<string> coursesCodes;
     int unavailability[5][2] = {{0, 1}, {1, 0}, {1, 1}, {0, 0}, {1, 1}};
     Professor professor("Dr. Smith", coursesCodes, unavailability);
-    // Assign professor to a course
     semesters[0].assignProfessorToCourse("MK1", professor);
     semesters[0].assignProfessorToCourse("MK2", professor);
+
     // Display professor's assigned courses
     cout << "Professor " << professor.getProfessorName() << " is assigned to the following courses:" << endl;
-    for (const string& courseId : professor.getCourseCodes()) {
+    for (string courseId : professor.getCourseCodes()) {
         cout << " - " << courseId << endl;
     }
 
@@ -43,7 +43,6 @@ int main() {
             break;
         }
     }
-
 
 
 

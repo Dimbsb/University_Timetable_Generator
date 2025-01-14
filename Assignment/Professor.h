@@ -18,7 +18,7 @@ public:
     string getProfessorName();
     vector<string> getCourseCodes();
     vector<pair<int, int> > getunavailability();
-    void assignCourse(const string& courseId); // Method to assign course
+    void assignCourse(string courseId); // Method to assign course
 };
 
 #endif

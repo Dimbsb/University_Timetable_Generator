@@ -9,13 +9,13 @@
 using namespace std;
 
 Course::Course() {
-    this->id = ""; 
-    this->name = ""; 
-    this->type = "";
+    id = ""; 
+    name = ""; 
+    type = "";
 }
 
 
-Course::Course(const string& id, const string& name, const string& type) {
+Course::Course(string id, string name, string type) {
     this->id = id;
     this->name = name;
     this->type = type;

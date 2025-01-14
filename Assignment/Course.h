@@ -12,7 +12,7 @@ using namespace std;
 
 class Course {
 public:
-    Course(const string& id, const string& name, const string& type);
+    Course(string id, string name, string type);
     Course();
     string getId() const;
     string getName() const;

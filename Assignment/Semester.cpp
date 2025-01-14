@@ -6,7 +6,7 @@
 #include <iostream> 
 using namespace std;
 
-Semester::Semester(int id, int CapacityofCourses, const string& FieldofStudies) {
+Semester::Semester(int id, int CapacityofCourses, string FieldofStudies) {
     this->id = id;
     this->CapacityofCourses = CapacityofCourses;
     this->FieldofStudies = FieldofStudies;
@@ -25,11 +25,11 @@ string Semester::getFieldofStudies() const {
 }
 
 
-const vector<Course>& Semester::getCourses() const {
+const vector<Course> Semester::getCourses() const {
     return courses;
 }
 
-void Semester::addCourse(const Course& course) {
+void Semester::addCourse(Course course) {
     if (courses.size() >= CapacityofCourses) {
         cout << "Cannot add more than " << CapacityofCourses << " courses." << endl;
         return ; 
@@ -37,11 +37,10 @@ void Semester::addCourse(const Course& course) {
     courses.push_back(course);
 }
 
-void Semester::assignProfessorToCourse(const string& courseId, Professor& professor) {
-    for (Course& course : courses) {
+void Semester::assignProfessorToCourse(string courseId, Professor professor) {
+    for (Course course : courses) {
         if (course.getId() == courseId) {
             professor.assignCourse(courseId);
-            //cout << "Assigned Professor " << professor.getProfessorName() << " to Course " << courseId << endl;
             return;
         }
     }

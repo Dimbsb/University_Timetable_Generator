@@ -12,14 +12,14 @@ using namespace std;
 
 class Semester {
 public:
-    Semester(int id,int CapacityofCourses, const string& FieldofStudies);
+    Semester(int id,int CapacityofCourses, string FieldofStudies);
     int getId() const;
     int getCapacityofCourses() const;
     string getFieldofStudies() const;
-    void addCourse(const Course& course);
-    const vector<Course>& getCourses() const;
+    void addCourse(Course course);
+    const vector<Course> getCourses() const;
     static void initializeCourses(vector<Semester>& semesters);
-    void assignProfessorToCourse(const string& courseId, Professor& professor); 
+    void assignProfessorToCourse(string courseId, Professor professor); 
 
 private:
     int CapacityofCourses;
