@@ -1,5 +1,9 @@
 // Course.cpp
 #include "Course.h"
+
+#include<iostream>
+#include<string>
+#include <utility>
 #include <iostream>
 #include <vector>
 using namespace std;

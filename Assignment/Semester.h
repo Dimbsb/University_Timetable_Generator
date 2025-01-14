@@ -2,6 +2,9 @@
 #ifndef SEMESTER_H
 #define SEMESTER_H
 
+#include<iostream>
+#include<string>
+#include <utility>
 #include <vector>
 #include "Course.h"
 using namespace std;

@@ -2,6 +2,9 @@
 #ifndef COURSE_H
 #define COURSE_H
 
+#include<iostream>
+#include<string>
+#include <utility>
 #include <string>
 #include <iostream>
 #include <vector>

@@ -1,7 +1,10 @@
 // main.cpp
-
+#include<iostream>
+#include<string>
+#include <utility>
 #include <iostream>
 #include <vector>
+
 #include "Semester.h"
 #include "Course.h"
 

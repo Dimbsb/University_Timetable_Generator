@@ -9,15 +9,15 @@ using namespace std;
 class Professor
 {
 	private:
-		string profName;
+		string ProfessorName;
 		vector<int> coursesCodes;
-		int anavailability[5][2];
+		int unavailability[5][2];
 	public:
 		Professor ();
-		Professor (string profName, vector<int> coursesCodes, int anavailability[5][2]);
-		string getProfName();
+		Professor (string ProfessorName, vector<int> coursesCodes, int unavailability[5][2]);
+		string getProfessorName();
 		vector<int> getCourseCodes();
-		vector<pair<int, int> > getAnavailability();
+		vector<pair<int, int> > getunavailability();
 };
 
 #endif

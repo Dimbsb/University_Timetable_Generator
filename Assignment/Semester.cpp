@@ -1,4 +1,8 @@
 #include "Semester.h"
+
+#include<iostream>
+#include<string>
+#include <utility>
 #include <iostream> 
 using namespace std;
 
