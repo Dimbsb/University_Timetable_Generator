@@ -1,5 +1,5 @@
 #include "Semester.h"
-#include <iostream> // Include for std::cout
+#include <iostream> 
 using namespace std;
 
 Semester::Semester(int id, int CapacityofCourses) {
@@ -26,3 +26,4 @@ void Semester::addCourse(const Course& course) {
 const vector<Course>& Semester::getCourses() const {
     return courses;
 }
+

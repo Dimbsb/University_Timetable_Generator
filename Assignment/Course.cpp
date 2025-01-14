@@ -1,18 +1,18 @@
 // Course.cpp
 #include "Course.h"
 #include <iostream>
+#include <vector>
 using namespace std;
 
-
 Course::Course() {
-    this->id = 0; 
+    this->id = ""; 
     this->name = ""; 
     this->type = ""; 
     this->FieldofStudies = ""; 
 }
 
 
-Course::Course(int id, const string& name, const string& type, const string& FieldofStudies) {
+Course::Course(const string& id, const string& name, const string& type, const string& FieldofStudies) {
     this->id = id;
     this->name = name;
     this->type = type;
@@ -21,7 +21,7 @@ Course::Course(int id, const string& name, const string& type, const string& Fie
 }
 
 
-int Course::getId() const { 
+string Course::getId() const { 
     return id; 
     }
 
@@ -51,3 +51,5 @@ void Course::readDataCourse(){
     cin >> FieldofStudies;
 
 }
+
+

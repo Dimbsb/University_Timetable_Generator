@@ -3,23 +3,26 @@
 #define COURSE_H
 
 #include <string>
+#include <iostream>
+#include <vector>
 using namespace std;
 
 class Course {
 public:
-    Course(int id, const string& name, const string& type, const string& FieldofStudies);
+    Course(const string& id, const string& name, const string& type, const string& FieldofStudies);
     Course();
-    int getId() const;
+    string getId() const;
     string getName() const;
     string getType() const;
     string getFieldofStudies() const;
     void readDataCourse();
 
 private:
-    int id;
+    string id;
     string name;
     string type;
     string FieldofStudies;
+
 };
 
 #endif
