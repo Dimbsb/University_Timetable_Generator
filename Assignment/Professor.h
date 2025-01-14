@@ -10,7 +10,7 @@ class Professor
 {
 private:
     string ProfessorName;
-    vector<string> coursesCodes; // Change to vector<string>
+    vector<string> coursesCodes; 
     int unavailability[5][2];
 public:
     Professor ();
@@ -18,7 +18,7 @@ public:
     string getProfessorName();
     vector<string> getCourseCodes();
     vector<pair<int, int> > getunavailability();
-    void assignCourse(string courseId); // Method to assign course
+    void assignCourse(string courseId); 
 };
 
 #endif

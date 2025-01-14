@@ -29,5 +29,5 @@ vector<pair<int, int> > Professor::getunavailability() {
     return availabilityList;
 }
 void Professor::assignCourse(string courseId) {
-    coursesCodes.push_back(courseId); // No error now since coursesCodes is vector<string>
+    coursesCodes.push_back(courseId); 
 }

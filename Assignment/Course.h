@@ -11,18 +11,21 @@
 using namespace std;
 
 class Course {
-public:
-    Course(string id, string name, string type);
-    Course();
-    string getId() const;
-    string getName() const;
-    string getType() const;
-    void readDataCourse();
 
 private:
     string id;
     string name;
-    string type;
+    bool isLecture;
+    bool isLab;
+
+
+public:
+    Course(string id, string name, bool isLecture, bool isLab);
+    Course();
+    string getId() const;
+    string getName() const;
+    string getType() const;
+
 };
 
 #endif

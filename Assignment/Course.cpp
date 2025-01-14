@@ -11,14 +11,17 @@ using namespace std;
 Course::Course() {
     id = ""; 
     name = ""; 
-    type = "";
+    isLecture = false;
+    isLab = false;
 }
 
 
-Course::Course(string id, string name, string type) {
+Course::Course(string id, string name, bool isLecture, bool isLab) {
     this->id = id;
     this->name = name;
-    this->type = type;
+    this->isLecture = isLecture;
+    this->isLab= isLab;
+
 }
 
 
@@ -32,18 +35,15 @@ string Course::getName() const {
     }
 
 
-string Course::getType() const { 
-    return type; 
-    }
-
-
-void Course::readDataCourse(){
-    cout << "Enter course id:";
-    cin >> id;
-    cout << "Enter course name:";
-    cin >> name;
-    cout << "Enter course type:";
-    cin >> type;
+string Course::getType() const {
+    if (isLecture && isLab)
+        return "Lecture and Lab";
+    else if (isLecture)
+        return "Lecture";
+    else if (isLab)
+        return "Lab";
+    return "None";
 }
+
 
 
