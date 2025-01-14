@@ -8,16 +8,17 @@ using namespace std;
 
 class Professor
 {
-	private:
-		string ProfessorName;
-		vector<int> coursesCodes;
-		int unavailability[5][2];
-	public:
-		Professor ();
-		Professor (string ProfessorName, vector<int> coursesCodes, int unavailability[5][2]);
-		string getProfessorName();
-		vector<int> getCourseCodes();
-		vector<pair<int, int> > getunavailability();
+private:
+    string ProfessorName;
+    vector<string> coursesCodes; // Change to vector<string>
+    int unavailability[5][2];
+public:
+    Professor ();
+    Professor (string ProfessorName, vector<string> coursesCodes, int unavailability[5][2]);
+    string getProfessorName();
+    vector<string> getCourseCodes();
+    vector<pair<int, int> > getunavailability();
+    void assignCourse(const string& courseId); // Method to assign course
 };
 
 #endif

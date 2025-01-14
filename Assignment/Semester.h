@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 #include "Course.h"
+#include "Professor.h"
 using namespace std;
 
 class Semester {
@@ -18,6 +19,7 @@ public:
     void addCourse(const Course& course);
     const vector<Course>& getCourses() const;
     static void initializeCourses(vector<Semester>& semesters);
+    void assignProfessorToCourse(const string& courseId, Professor& professor); 
 
 private:
     int CapacityofCourses;

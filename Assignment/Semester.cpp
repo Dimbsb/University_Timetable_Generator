@@ -25,6 +25,10 @@ string Semester::getFieldofStudies() const {
 }
 
 
+const vector<Course>& Semester::getCourses() const {
+    return courses;
+}
+
 void Semester::addCourse(const Course& course) {
     if (courses.size() >= CapacityofCourses) {
         cout << "Cannot add more than " << CapacityofCourses << " courses." << endl;
@@ -33,9 +37,17 @@ void Semester::addCourse(const Course& course) {
     courses.push_back(course);
 }
 
-const vector<Course>& Semester::getCourses() const {
-    return courses;
+void Semester::assignProfessorToCourse(const string& courseId, Professor& professor) {
+    for (Course& course : courses) {
+        if (course.getId() == courseId) {
+            professor.assignCourse(courseId);
+            //cout << "Assigned Professor " << professor.getProfessorName() << " to Course " << courseId << endl;
+            return;
+        }
+    }
+    cout << "Course ID " << courseId << " not found in Semester " << id << endl;
 }
+
 
 void Semester::initializeCourses(vector<Semester>& semesters) {
 
