@@ -8,16 +8,19 @@ using namespace std;
 
 class Semester {
 public:
-    Semester(int id,int CapacityofCourses);
+    Semester(int id,int CapacityofCourses, const string& FieldofStudies);
     int getId() const;
     int getCapacityofCourses() const;
+    string getFieldofStudies() const;
     void addCourse(const Course& course);
     const vector<Course>& getCourses() const;
+    static void initializeCourses(vector<Semester>& semesters);
 
 private:
     int CapacityofCourses;
     int id;
     vector<Course> courses;
+    string FieldofStudies;
 };
 
 #endif

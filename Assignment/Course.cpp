@@ -7,17 +7,14 @@ using namespace std;
 Course::Course() {
     this->id = ""; 
     this->name = ""; 
-    this->type = ""; 
-    this->FieldofStudies = ""; 
+    this->type = "";
 }
 
 
-Course::Course(const string& id, const string& name, const string& type, const string& FieldofStudies) {
+Course::Course(const string& id, const string& name, const string& type) {
     this->id = id;
     this->name = name;
     this->type = type;
-    this->FieldofStudies = FieldofStudies;
-
 }
 
 
@@ -35,10 +32,6 @@ string Course::getType() const {
     return type; 
     }
 
-string Course::getFieldofStudies() const { 
-    return FieldofStudies; 
-    }
-
 
 void Course::readDataCourse(){
     cout << "Enter course id:";
@@ -47,9 +40,6 @@ void Course::readDataCourse(){
     cin >> name;
     cout << "Enter course type:";
     cin >> type;
-    cout << "Enter course FieldofStudies:";
-    cin >> FieldofStudies;
-
 }
 
 
