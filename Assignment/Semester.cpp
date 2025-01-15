@@ -5,6 +5,7 @@
 #include<string>
 #include <utility>
 #include <iostream>
+#include <algorithm> 
 using namespace std;
 
 Semester::Semester() {
@@ -44,9 +45,13 @@ void Semester::addCourse(Course course) {
 }
 
 void Semester::assignProfessorToCourse(string courseId, Professor & professor) {
-    for (Course course: courses) {
+    for (Course & course : courses) {
         if (course.getId() == courseId) {
-            professor.assignCourse(courseId);
+            // Check if the professor is already assigned to this course
+            const vector<string> & assignedCourses = professor.getCourseCodes();
+            if (find(assignedCourses.begin(), assignedCourses.end(), courseId) == assignedCourses.end()) {
+                professor.assignCourse(courseId);
+            } 
             return;
         }
     }
