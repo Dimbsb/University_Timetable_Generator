@@ -15,10 +15,10 @@ Professor::Professor (string ProfessorName, vector<string> coursesCodes, int una
         }
     }
 }
-string Professor::getProfessorName(){
+string Professor::getProfessorName() const{
     return ProfessorName;
 }
-vector<string> Professor::getCourseCodes(){
+vector<string> Professor::getCourseCodes() const{
     return coursesCodes;
 }
 vector<pair<int, int> > Professor::getunavailability() {

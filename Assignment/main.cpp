@@ -13,9 +13,9 @@ using namespace std;
 int main() {
     vector<Semester> semesters;
     Semester::initializeCourses(semesters);
-
-    // Create a professor
     vector<string> coursesCodes;
+    vector<Professor> professors;
+
 // Define professors and assign them to courses
 Professor professor1("Dr. Smith", {"MK1", "MK2"}, {});
 semesters[0].assignProfessorToCourse("MK1", professor1);
@@ -98,13 +98,13 @@ semesters[9].assignProfessorToCourse("MK39", professor20);
 semesters[9].assignProfessorToCourse("MK40", professor20);
 
     // Display professor's assigned courses
-for (const Professor& professor : professor) {
-    cout << "Professor " << professor.getProfessorName() << " is assigned to the following courses:" << endl;
-    for (const string& courseId : professor.getCourseCodes()) { // Loop through the courses of this professor
-        cout << " - " << courseId << endl;
+    for (const Professor& professor : professors) {
+        cout << "Professor " << professor.getProfessorName() << " is assigned to the following courses:" << endl;
+        for (const string& courseId : professor.getCourseCodes()) { // Loop through the courses of this professor
+            cout << " - " << courseId << endl;
+        }
+        cout << endl; // Add spacing between professors
     }
-    cout << endl; // Add spacing between professors
-}
 
 
     int selectedSemesterId;
