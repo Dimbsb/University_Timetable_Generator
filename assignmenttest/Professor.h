@@ -1,23 +1,22 @@
 #ifndef PROFESSOR_H
 #define PROFESSOR_H
-#include<iostream>
-#include<string>
+#include <iostream>
+#include <string>
 #include <utility>
 #include <vector>
 using namespace std;
 
-class Professor
-{
+class Professor {
 private:
     string ProfessorName;
     vector<string> coursesCodes; 
     int unavailability[5][2];
 public:
-    Professor ();
-    Professor (string ProfessorName, vector<string> coursesCodes, int unavailability[5][2]);
+    Professor();
+    Professor(string ProfessorName, vector<string> coursesCodes, int unavailability[5][2]);
     string getProfessorName() const;
     vector<string> getCourseCodes() const;
-    vector<pair<int, int> > getunavailability();
+    vector<pair<int, int>> getunavailability() const;  // Marked as const
     void assignCourse(string courseId); 
 };
 

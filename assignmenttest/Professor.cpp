@@ -21,13 +21,15 @@ string Professor::getProfessorName() const{
 vector<string> Professor::getCourseCodes() const{
     return coursesCodes;
 }
-vector<pair<int, int> > Professor::getunavailability() {
-    vector<pair<int, int> > availabilityList;
+vector<pair<int, int>> Professor::getunavailability() const {
+    vector<pair<int, int>> availabilityList;
     for (int i = 0; i < 5; ++i) {
         availabilityList.push_back(make_pair(unavailability[i][0], unavailability[i][1]));
     }
     return availabilityList;
 }
+
+
 void Professor::assignCourse(string courseId) {
     coursesCodes.push_back(courseId); 
 }
