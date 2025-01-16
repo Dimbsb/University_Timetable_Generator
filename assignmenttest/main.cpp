@@ -143,20 +143,12 @@ int main() {
     semesters[1].assignProfessorToCourse("MK16", professor8);
     professors.push_back(professor8);
 
-    // Initialize all courses
+    // Retrieve courses from semesters
     vector<Course> allCourses;
-    allCourses.push_back(Course("MK1", "Course 1", true, false, 2));
-    allCourses.push_back(Course("MK2", "Course 2", true, false, 3));
-    allCourses.push_back(Course("MK4-H", "Course 4", false, true, 2));
-    allCourses.push_back(Course("MK7", "Course 7", true, false, 4));
-    allCourses.push_back(Course("MK8", "Course 8", false, true, 3));
-    allCourses.push_back(Course("MK9", "Course 9", true, false, 2));
-    allCourses.push_back(Course("MK10", "Course 10", true, false, 2));
-    allCourses.push_back(Course("MK11", "Course 11", false, true, 3));
-    allCourses.push_back(Course("MK12", "Course 12", true, false, 3));
-    allCourses.push_back(Course("MK14", "Course 14", true, false, 2));
-    allCourses.push_back(Course("MK15", "Course 15", true, false, 3));
-    allCourses.push_back(Course("MK16", "Course 16", false, true, 3));
+    for (const Semester& semester : semesters) {
+        vector<Course> courses = semester.getCourses();
+        allCourses.insert(allCourses.end(), courses.begin(), courses.end());
+    }
 
     // Initialize rooms
     vector<string> rooms = {"Room A", "Room B", "Room C", "Room D"};
