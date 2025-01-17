@@ -6,6 +6,7 @@
 using namespace std;
 
 Professor::Professor () {}
+
 Professor::Professor (string ProfessorName, vector<string> coursesCodes, int unavailability[5][2]){
     this->ProfessorName = ProfessorName;
     this->coursesCodes = coursesCodes;

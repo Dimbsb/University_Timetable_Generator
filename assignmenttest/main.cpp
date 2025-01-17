@@ -1,17 +1,17 @@
+#include "Professor.h"
+#include "Semester.h"
+#include "Course.h"
+
 #include <iostream>
 #include <vector>
 #include <string>
 #include <map>
 #include <algorithm>
-#include "Professor.h"
-#include "Semester.h"
-#include "Course.h"
-
 using namespace std;
 
 struct TimeSlot {
-    int start; // e.g., 9 for 9 AM, 14 for 2 PM
-    int end;   // e.g., 11 for 11 AM, 17 for 5 PM
+    int start; 
+    int end;   
 };
 
 struct Assignment {

@@ -16,7 +16,7 @@ public:
     Professor(string ProfessorName, vector<string> coursesCodes, int unavailability[5][2]);
     string getProfessorName() const;
     vector<string> getCourseCodes() const;
-    vector<pair<int, int>> getunavailability() const;  // Marked as const
+    vector<pair<int, int>> getunavailability() const;  
     void assignCourse(string courseId); 
 };
 
