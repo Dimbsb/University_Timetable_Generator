@@ -52,7 +52,7 @@ void Semester::assignProfessorToCourse(string courseId, Professor & professor) {
 void Semester::initializeCourses(vector < Semester > & semesters) {
     Semester semester1(1, 7, "core course");
     semester1.addCourse(Course("MKH3", "Mechanics", true, false, 4));
-    semester1.addCourse(Course("MK1", "Mathematical Analysis I", true, false, 2));
+    semester1.addCourse(Course("MK1", "Mathematical Analysis I", true, false, 4));
     semester1.addCourse(Course("MK2", "Linear Algebra", true, false, 4));
     semester1.addCourse(Course("MK4-H", "Structured Programming", true, true, 4));
     semester1.addCourse(Course("MK9", "Digital Design", true, true, 4));
