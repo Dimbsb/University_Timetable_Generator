@@ -1,5 +1,11 @@
 #include "Course.h"
 
+#include<iostream>
+#include<string>
+#include <utility>
+#include <vector>
+using namespace std;
+
 Course::Course() {
     id = "";
     name = "";
@@ -36,4 +42,20 @@ string Course::getType() const {
 
 int Course::getTeachinHours() const {
     return TeachingHours;
+}
+
+TimeSlot Course::getTimeslot() const { // Add getter implementation
+    return timeslot;
+}
+
+int Course::getDay() const { // Add getter implementation
+    return day;
+}
+
+Professor Course::getProfessor() const { // Add getter implementation
+    return professor;
+}
+
+Room Course::getRoom() const { // Add getter implementation
+    return room;
 }
