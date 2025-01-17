@@ -51,13 +51,13 @@ void Semester::assignProfessorToCourse(string courseId, Professor & professor) {
 }
 void Semester::initializeCourses(vector < Semester > & semesters) {
     Semester semester1(1, 7, "core course");
-    semester1.addCourse(Course("MKH3", "Mechanics", true, false, 4));
-    semester1.addCourse(Course("MK1", "Mathematical Analysis I", true, false, 4));
-    semester1.addCourse(Course("MK2", "Linear Algebra", true, false, 4));
-    semester1.addCourse(Course("MK4-H", "Structured Programming", true, true, 4));
+    semester1.addCourse(Course("MKH3", "Mechanics", true, false, 4));//
+    semester1.addCourse(Course("MK1", "Mathematical Analysis I", true, false, 4));//
+    semester1.addCourse(Course("MK2", "Linear Algebra", true, false, 4));//
+    semester1.addCourse(Course("MK4-H", "Structured Programming", true, true, 4));//
     semester1.addCourse(Course("MK9", "Digital Design", true, true, 4));
-    semester1.addCourse(Course("MKH2", "Design", true, true, 4));
-    semester1.addCourse(Course("MK7", "English", true, false, 4));
+    semester1.addCourse(Course("MKH2", "Design", true, true, 4));//
+    semester1.addCourse(Course("MK7", "English", true, false, 4));//
     semesters.push_back(semester1);
     Semester semester2(2, 6, "core course");
     semester2.addCourse(Course("MK8", "Mathematical Analysis II", true, false, 4));

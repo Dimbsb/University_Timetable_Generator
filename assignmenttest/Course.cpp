@@ -43,4 +43,3 @@ string Course::getType() const {
 int Course::getTeachinHours() const {
     return TeachingHours;
 }
-

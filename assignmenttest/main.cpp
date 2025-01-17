@@ -41,6 +41,7 @@ void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses,
     map<string, map<string, vector<Assignment>>> weeklySchedule; // Weekly schedule by day
     map<string, vector<TimeSlot>> roomSchedules; // Room schedules
     map<string, map<string, vector<TimeSlot>>> professorSchedules; // Professor schedules per day
+    map<int, map<string, vector<TimeSlot>>> semesterSchedules; // Semester schedules per day
     vector<string> daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
     for (Professor& professor : professors) {
@@ -58,8 +59,14 @@ void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses,
 
             int requiredHours = course->getTeachinHours();
             int remainingHours = requiredHours;
+            int semester = semester;
 
-            // Process each day of the week
+            // Split hours into lab and lecture
+            bool isLabCourse = course->isLabCourse();
+            bool isLectureCourse = course->isLectureCourse();
+            int labHours = (isLabCourse && isLectureCourse) ? requiredHours / 2 : (isLabCourse ? requiredHours : 0);
+            int lectureHours = (isLabCourse && isLectureCourse) ? requiredHours / 2 : (isLectureCourse ? requiredHours : 0);
+
             for (int dayIndex = 0; dayIndex < 5; ++dayIndex) {
                 if (remainingHours <= 0) break;
 
@@ -77,66 +84,63 @@ void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses,
                 }
 
                 // Try to schedule the course within the available slots
-                for (const TimeSlot& availableSlot : availableSlots) {
+                for (TimeSlot& availableSlot : availableSlots) {
                     if (remainingHours <= 0) break;
 
-                    for (int startHour = availableSlot.start; startHour < availableSlot.end; ++startHour) {
-                        // Time slot length is adjusted based on remaining hours
-                        int slotLength = min(remainingHours, availableSlot.end - startHour);
-                        TimeSlot slot = {startHour, startHour + slotLength};
+                    // Schedule lecture hours first
+                    if (lectureHours > 0) {
+                        int lectureSlotLength = min(lectureHours, availableSlot.end - availableSlot.start);
+                        TimeSlot lectureSlot = {availableSlot.start, availableSlot.start + lectureSlotLength};
 
-                        // Check if the professor is available during this time slot
-                        bool professorAvailable = true;
-                        for (const TimeSlot& professorSlot : professorSchedules[professor.getProfessorName()][day]) {
-                            if (!(slot.end <= professorSlot.start || slot.start >= professorSlot.end)) {
-                                professorAvailable = false;
+                        // Check availability for lecture rooms
+                        for (LectureRoom& room : lectureRooms) {
+                            bool roomAvailable = true;
+                            for (const TimeSlot& roomSlot : roomSchedules[room.getRoomName()]) {
+                                if (!(lectureSlot.end <= roomSlot.start || lectureSlot.start >= roomSlot.end)) {
+                                    roomAvailable = false;
+                                    break;
+                                }
+                            }
+                            if (roomAvailable) {
+                                Assignment lectureAssignment = {room.getRoomName(), *course, lectureSlot};
+                                weeklySchedule[day][professor.getProfessorName()].push_back(lectureAssignment);
+                                roomSchedules[room.getRoomName()].push_back(lectureSlot);
+                                professorSchedules[professor.getProfessorName()][day].push_back(lectureSlot);
+
+                                lectureHours -= lectureSlotLength;
+                                remainingHours -= lectureSlotLength;
+                                availableSlot.start += lectureSlotLength;
                                 break;
                             }
                         }
-                        if (!professorAvailable) continue; // Skip if the professor is already assigned another course
+                    }
 
-                        // Check room availability and assign
-                        bool assigned = false;
-                        if (course->isLabCourse()) {
-                            for (Laboratory& room : labRooms) {
-                                bool roomAvailable = true;
-                                for (const TimeSlot& roomSlot : roomSchedules[room.getRoomName()]) {
-                                    if (!(slot.end <= roomSlot.start || slot.start >= roomSlot.end)) {
-                                        roomAvailable = false;
-                                        break;
-                                    }
-                                }
-                                if (roomAvailable) {
-                                    Assignment assignment = {room.getRoomName(), *course, slot};
-                                    weeklySchedule[day][professor.getProfessorName()].push_back(assignment);
-                                    roomSchedules[room.getRoomName()].push_back(slot);
-                                    professorSchedules[professor.getProfessorName()][day].push_back(slot);
-                                    remainingHours -= slotLength;
-                                    assigned = true;
+                    // Schedule lab hours next
+                    if (labHours > 0 && availableSlot.start < availableSlot.end) {
+                        int labSlotLength = min(labHours, availableSlot.end - availableSlot.start);
+                        TimeSlot labSlot = {availableSlot.start, availableSlot.start + labSlotLength};
+
+                        // Check availability for laboratory rooms
+                        for (Laboratory& room : labRooms) {
+                            bool roomAvailable = true;
+                            for (const TimeSlot& roomSlot : roomSchedules[room.getRoomName()]) {
+                                if (!(labSlot.end <= roomSlot.start || labSlot.start >= roomSlot.end)) {
+                                    roomAvailable = false;
                                     break;
                                 }
                             }
-                        } else {
-                            for (LectureRoom& room : lectureRooms) {
-                                bool roomAvailable = true;
-                                for (const TimeSlot& roomSlot : roomSchedules[room.getRoomName()]) {
-                                    if (!(slot.end <= roomSlot.start || slot.start >= roomSlot.end)) {
-                                        roomAvailable = false;
-                                        break;
-                                    }
-                                }
-                                if (roomAvailable) {
-                                    Assignment assignment = {room.getRoomName(), *course, slot};
-                                    weeklySchedule[day][professor.getProfessorName()].push_back(assignment);
-                                    roomSchedules[room.getRoomName()].push_back(slot);
-                                    professorSchedules[professor.getProfessorName()][day].push_back(slot);
-                                    remainingHours -= slotLength;
-                                    assigned = true;
-                                    break;
-                                }
+                            if (roomAvailable) {
+                                Assignment labAssignment = {room.getRoomName(), *course, labSlot};
+                                weeklySchedule[day][professor.getProfessorName()].push_back(labAssignment);
+                                roomSchedules[room.getRoomName()].push_back(labSlot);
+                                professorSchedules[professor.getProfessorName()][day].push_back(labSlot);
+
+                                labHours -= labSlotLength;
+                                remainingHours -= labSlotLength;
+                                availableSlot.start += labSlotLength;
+                                break;
                             }
                         }
-                        if (assigned) break; // Move to the next slot if assigned
                     }
                 }
             }
@@ -162,8 +166,6 @@ void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses,
 }
 
 
-
-
 int main() {
     cout << "Starting Timetable Generator..." << endl;
 
@@ -178,30 +180,64 @@ int main() {
     lectureRooms.push_back(LectureRoom("L101", "Building A", 50, "Lecture Room"));
     lectureRooms.push_back(LectureRoom("L102", "Building B", 75, "Lecture Room"));
     lectureRooms.push_back(LectureRoom("L103", "Building C", 100, "Lecture Hall"));
+    lectureRooms.push_back(LectureRoom("L104", "Building A", 50, "Lecture Room"));
+    lectureRooms.push_back(LectureRoom("L105", "Building B", 75, "Lecture Room"));
+    lectureRooms.push_back(LectureRoom("L106", "Building C", 100, "Lecture Room"));
 
     // Add some laboratory rooms
     laboratories.push_back(Laboratory("Lab201", "Building A", 30, "Computer Lab1"));
     laboratories.push_back(Laboratory("Lab202", "Building B", 25, "Computer Lab2"));
     laboratories.push_back(Laboratory("Lab203", "Building C", 20, "Computer Lab3"));
+    laboratories.push_back(Laboratory("Lab204", "Building A", 30, "Computer Lab4"));
+    laboratories.push_back(Laboratory("Lab205", "Building B", 25, "Computer Lab5"));
+    laboratories.push_back(Laboratory("Lab206", "Building C", 20, "Computer Lab6"));
 
     // Define unavailability
-    vector<pair<int, int>> unavailability1 = {{9, 10}, {9, 10}, {9, 20}, {9, 13}, {9, 13}};
-    vector<pair<int, int>> unavailability2 = {{9, 10}, {9, 10}, {9, 20}, {9, 13}, {9, 13}};
+    vector<pair<int, int>> unavailability1 = {{9, 9}, {9, 9}, {9, 10}, {9, 20}, {9, 20}};
+    vector<pair<int, int>> unavailability2 = {{9, 20}, {9, 20}, {9, 10}, {9, 20}, {9, 9}};
+    vector<pair<int, int>> unavailability3 = {{9, 10}, {9, 10}, {9, 20}, {9, 10}, {9, 10}};
+    vector<pair<int, int>> unavailability4 = {{9, 20}, {9, 20}, {9, 20}, {9, 10}, {9, 10}};
+    vector<pair<int, int>> unavailability5 = {{9, 15}, {9, 20}, {9, 20}, {9, 10}, {9, 10}};
+    vector<pair<int, int>> unavailability6 = {{9, 9}, {9, 20}, {9, 20}, {9, 20}, {9, 9}};
+
 
 
     // Professor 1
     vector<string> courses1 = {"MK1", "MK2"};
-    Professor professor1("Dr. Smith", courses1, unavailability1);
+    Professor professor1("EceTeacher-1", courses1, unavailability1);
     semesters[0].assignProfessorToCourse("MK1", professor1);
     semesters[0].assignProfessorToCourse("MK2", professor1);
     professors.push_back(professor1);
 
     // Professor 2
-    vector<string> courses2 = {"MK15", "MK17"};
-    Professor professor2("Dr. Dimitris", courses2, unavailability2);
-    semesters[2].assignProfessorToCourse("MK15", professor2);
-    semesters[2].assignProfessorToCourse("MK17", professor2);
+    vector<string> courses2 = {"MK7"};
+    Professor professor2("EceTeacher-2", courses2, unavailability2);
+    semesters[0].assignProfessorToCourse("MK7", professor2);
     professors.push_back(professor2);
+
+    // Professor 3
+    vector<string> courses3 = {"MKH2"};
+    Professor professor3("EceTeacher-3", courses3, unavailability3);
+    semesters[0].assignProfessorToCourse("MKH2", professor3);
+    professors.push_back(professor3);
+
+    // Professor 4
+    vector<string> courses4 = {"MKH3"};
+    Professor professor4("EceTeacher-4", courses4, unavailability4);
+    semesters[0].assignProfessorToCourse("MKH3", professor4);
+    professors.push_back(professor4);
+
+    // Professor 5
+    vector<string> courses5 = {"MK4-H"};
+    Professor professor5("EceTeacher-4", courses5, unavailability5);
+    semesters[0].assignProfessorToCourse("MK4-H", professor5);
+    professors.push_back(professor5);
+
+    // Professor 6
+    vector<string> courses6 = {"MK9"};
+    Professor professor6("EceTeacher-4", courses6, unavailability6);
+    semesters[0].assignProfessorToCourse("MK9", professor6);
+    professors.push_back(professor6);
 
 
     // Retrieve courses from semesters
