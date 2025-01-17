@@ -20,5 +20,7 @@ class Course {
     string getName() const;
     string getType() const;
     int getTeachinHours() const;
+    bool isLabCourse() const { return isLab; }
+    bool isLectureCourse() const { return isLecture; }
 };
 #endif
