@@ -35,10 +35,10 @@ bool isProfessorAvailable(const Professor& professor, const TimeSlot& slot) {
     return true;
 }
 
-
 // Generate the schedule based on professors, courses, and rooms data
 void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses, vector<string>& rooms) {
     map<string, vector<Assignment>> weeklySchedule; // Using a map to store the weekly schedule
+    map<string, vector<TimeSlot>> roomSchedules; // To keep track of room schedules
 
     for (Professor& professor : professors) {
         vector<string> professorCourses = professor.getCourseCodes();
@@ -57,25 +57,40 @@ void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses,
 
             // Handle courses longer than 3 hours by splitting them
             vector<TimeSlot> courseTimeSlots;
-            if (course->getTeachinHours() > 3) {
-                int mid = course->getTeachinHours() / 2;
-                TimeSlot slot1 = {9, 9 + mid};  // Example: 9 AM to mid
-                TimeSlot slot2 = {9 + mid, 9 + course->getTeachinHours()};  // Example: mid to end
+            int hours = course->getTeachinHours();
+            if (hours > 3) {
+                int mid = hours / 2;
+                TimeSlot slot1 = {9, 9+mid};  // Example: 9 AM to mid
+                TimeSlot slot2 = {9+mid ,9+hours};  // Example: mid to end
                 courseTimeSlots.push_back(slot1);
                 courseTimeSlots.push_back(slot2);
             } else {
-                TimeSlot slot = {9, 9 + course->getTeachinHours()};  // Example: 9 AM to end
+                TimeSlot slot = {9, 9 + hours};  // Example: 9 AM to end
                 courseTimeSlots.push_back(slot);
             }
 
             // Assign course to available slots and rooms
             for (const TimeSlot& slot : courseTimeSlots) {
                 if (isProfessorAvailable(professor, slot)) {
-                    if (!rooms.empty()) {
-                        Assignment assignment = {rooms[0], *course, slot};  // Assign the first room (for simplicity)
-                        weeklySchedule[professor.getProfessorName()].push_back(assignment);
-                        rooms.erase(rooms.begin()); // Remove the assigned room from the list
-                    } else {
+                    bool roomAssigned = false;
+                    for (string& room : rooms) {
+                        bool roomAvailable = true;
+                        for (const TimeSlot& roomSlot : roomSchedules[room]) {
+                            if ((slot.start < roomSlot.end && slot.end > roomSlot.start) ||
+                                (slot.start >= roomSlot.start && slot.end <= roomSlot.end)) {
+                                roomAvailable = false;
+                                break;
+                            }
+                        }
+                        if (roomAvailable) {
+                            Assignment assignment = {room, *course, slot};  // Assign the room
+                            weeklySchedule[professor.getProfessorName()].push_back(assignment);
+                            roomSchedules[room].push_back(slot); // Update room schedule
+                            roomAssigned = true;
+                            break;
+                        }
+                    }
+                    if (!roomAssigned) {
                         cout << "No available rooms for course " << course->getName() << " taught by " << professor.getProfessorName() << endl;
                     }
                 } else {
@@ -117,11 +132,11 @@ int main() {
 
     // Define unavailability
     int unavailability1[5][2] = {
-        {13, 15}, // Monday
-        {14, 16}, // Tuesday
-        {12, 14}, // Wednesday
-        {10, 12}, // Thursday
-        {9, 11}   // Friday
+        {14, 16}, 
+        {14, 16}, 
+        {14, 16}, 
+        {14, 16}, 
+        {14, 16}   
     };
 
     // Professor 1
@@ -131,7 +146,6 @@ int main() {
     semesters[0].assignProfessorToCourse("MK2", professor1);
     professors.push_back(professor1);
 
-
     // Retrieve courses from semesters
     vector<Course> allCourses;
     for (const Semester& semester : semesters) {
@@ -140,7 +154,14 @@ int main() {
     }
 
     // Initialize rooms
-    vector<string> rooms = {"lectureRooms", "laboratories"};
+    vector<string> rooms;
+
+    for (const auto& room : lectureRooms) {
+        rooms.push_back(room.getRoomName());
+    }
+    for (const auto& room : laboratories) {
+        rooms.push_back(room.getRoomName());
+    }
 
     // Generate and print the weekly schedule
     generateSchedule(professors, allCourses, rooms);
