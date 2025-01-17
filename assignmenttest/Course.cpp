@@ -1,12 +1,4 @@
-// Course.cpp
 #include "Course.h"
-
-#include<iostream>
-#include<string>
-#include <utility>
-#include <iostream>
-#include <vector>
-using namespace std;
 
 Course::Course() {
     id = "";
@@ -17,12 +9,11 @@ Course::Course() {
 }
 
 Course::Course(string id, string name, bool isLecture, bool isLab, int TeachingHours) {
-    this -> id = id;
-    this -> name = name;
-    this -> isLecture = isLecture;
-    this -> isLab = isLab;
-    this -> TeachingHours = TeachingHours;
-
+    this->id = id;
+    this->name = name;
+    this->isLecture = isLecture;
+    this->isLab = isLab;
+    this->TeachingHours = TeachingHours;
 }
 
 string Course::getId() const {

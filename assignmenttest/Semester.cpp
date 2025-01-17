@@ -1,11 +1,7 @@
 // Semester.cpp
 #include "Semester.h"
-
-#include<iostream>
-#include<string>
-#include <utility>
 #include <iostream>
-#include <algorithm> 
+#include <algorithm>
 using namespace std;
 
 Semester::Semester() {
@@ -15,9 +11,9 @@ Semester::Semester() {
 }
 
 Semester::Semester(int id, int CapacityofCourses, string FieldofStudies) {
-    this -> id = id;
-    this -> CapacityofCourses = CapacityofCourses;
-    this -> FieldofStudies = FieldofStudies;
+    this->id = id;
+    this->CapacityofCourses = CapacityofCourses;
+    this->FieldofStudies = FieldofStudies;
 }
 
 int Semester::getId() const {
@@ -32,7 +28,7 @@ string Semester::getFieldofStudies() const {
     return FieldofStudies;
 }
 
-vector < Course > Semester::getCourses() const {
+vector<Course> Semester::getCourses() const {
     return courses;
 }
 
@@ -44,12 +40,11 @@ void Semester::addCourse(Course course) {
     courses.push_back(course);
 }
 
-void Semester::assignProfessorToCourse(string courseId, Professor & professor) {
+void Semester::assignProfessorToCourse(string courseId, Professor& professor) {
     for (size_t i = 0; i < courses.size(); ++i) {
-        Course & course = courses[i];
+        Course& course = courses[i];
         if (course.getId() == courseId) {
-            // Check if the professor is already assigned to this course
-            const vector<string> & assignedCourses = professor.getCourseCodes();
+            const vector<string>& assignedCourses = professor.getCourseCodes();
             if (find(assignedCourses.begin(), assignedCourses.end(), courseId) == assignedCourses.end()) {
                 professor.assignCourse(courseId);
             }

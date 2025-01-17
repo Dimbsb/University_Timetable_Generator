@@ -2,73 +2,66 @@
 #include "Semester.h"
 #include "Course.h"
 #include "Room.h"
+#include "Laboratory.h"
+#include "LectureRoom.h"
 
+
+#include<iostream>
+#include<string>
+#include <utility>
 #include <iostream>
 #include <vector>
-#include <string>
-#include <map>
-#include <algorithm>
 using namespace std;
 
-void generateTimetable(const vector<Professor>& professors, const vector<Room>& rooms, vector<Semester>& semesters) {
-    for (auto& semester : semesters) {
-        for (auto& course : semester.getCourses()) {
-            for (int day = 0; day < 5; ++day) {
-                for (int hour = 9; hour <= 18; hour += 2) {
-                    bool assigned = false;
-                    for (const auto& professor : professors) {
-                        if (isProfessorAvailable(professor, day, hour)) {
-                            // Logic to check room availability and assign room
-                            // Logic to check if the course already scheduled and avoid overlap
-                            if (!assigned) {
-                                // Assign course to professor and room
-                                assigned = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-void printTimetable(const vector<Semester>& semesters) {
-    for (const auto& semester : semesters) {
-        cout << "Semester " << semester.getId() << " (" << semester.getFieldofStudies() << "):" << endl;
-        for (const auto& course : semester.getCourses()) {
-            cout << "  " << course.getName() << " (" << course.getId() << "): ";
-            // Print course schedule details
-        }
-    }
-}
-
 int main() {
-    cout << "Starting Timetable Generator..." << endl;
 
-    vector<Professor> professors;
-    vector<Room> rooms;
     vector<Semester> semesters;
+    vector<string> coursesCodes;
+    vector<Professor> professors;
+    vector<LectureRoom> lectureRooms;
+    vector<Laboratory> laboratories;
 
-    // Initialize professors, rooms, and semesters
-    // Example initialization, replace with actual data
-    int unavailability[5][2] = {{0, 9}, {1, 14}, {2, 11}, {3, 10}, {4, 15}};
-    professors.push_back(Professor("Prof. A", {"MKH3", "MK1"}, unavailability));
-    professors.push_back(Professor("Prof. B", {"MK2", "MK4-H"}, unavailability));
+    // Add some lecture rooms
+    lectureRooms.push_back(LectureRoom("L101", "Building A", 50, "Lecture Room"));
+    lectureRooms.push_back(LectureRoom("L102", "Building B", 75, "Lecture Room"));
+    lectureRooms.push_back(LectureRoom("L103", "Building C", 100, "Lecture Hall"));
 
-    rooms.push_back(Room("R101", "Building A", 30));
-    rooms.push_back(Room("R102", "Building B", 25));
+    // Add some laboratory rooms
+    laboratories.push_back(Laboratory("Lab201", "Building A", 30, "Computer Lab1"));
+    laboratories.push_back(Laboratory("Lab202", "Building B", 25, "Computer Lab2"));
+    laboratories.push_back(Laboratory("Lab203", "Building C", 20, "Computer Lab3"));
 
-    Semester semester1(1, 7, "core course");
-    semester1.addCourse(Course("MKH3", "Mechanics", true, false, 4));
-    semester1.addCourse(Course("MK1", "Mathematical Analysis I", true, false, 4));
-    semester1.addCourse(Course("MK2", "Linear Algebra", true, false, 4));
-    semester1.addCourse(Course("MK4-H", "Structured Programming", true, true, 4));
-    semesters.push_back(semester1);
 
-    generateTimetable(professors, rooms, semesters);
-    printTimetable(semesters);
 
-    cout << "Timetable generation completed." << endl;
+    // Define unavailability: Monday (13:00–15:00), Tuesday (14:00–16:00), etc.
+    pair<int, int> unavailability1[5] = {
+        {13, 15}, // Monday
+        {14, 16}, // Tuesday
+        {12, 14}, // Wednesday
+        {10, 12}, // Thursday
+        {9, 11}   // Friday
+    };
+
+    pair<int, int> unavailability2[5] = {
+        {13, 15}, 
+        {14, 16}, 
+        {12, 14}, 
+        {10, 12}, 
+        {9, 11}   
+    };
+
+    Professor professor1("Dr. Smith", {"MK1","MK2"}, {unavailability1});
+    semesters[0].assignProfessorToCourse("MK1", professor1);
+    semesters[0].assignProfessorToCourse("MK2", professor1);
+    professors.push_back(professor1);
+
+    Professor professor2("Dr. Johnson", {"MK4-H"}, {unavailability2});
+    semesters[0].assignProfessorToCourse("MK4-H", professor2);
+    professors.push_back(professor2);
+
+    
+
+    
 
     return 0;
 }
