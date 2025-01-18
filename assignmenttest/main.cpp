@@ -37,12 +37,24 @@ bool isProfessorAvailable(const Professor& professor, const TimeSlot& slot) {
 
 
 // Generate the schedule based on professors, courses, and rooms data
-void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses, vector<LectureRoom>& lectureRooms, vector<Laboratory>& labRooms) {
+void generateSchedule(vector<Professor>& professors, vector<Semester>& semesters, vector<Course>& allCourses, vector<LectureRoom>& lectureRooms, vector<Laboratory>& labRooms) {
     map<string, map<string, vector<Assignment>>> weeklySchedule; // Weekly schedule by day
     map<string, vector<TimeSlot>> roomSchedules; // Room schedules
     map<string, map<string, vector<TimeSlot>>> professorSchedules; // Professor schedules per day
     map<int, map<string, vector<TimeSlot>>> semesterSchedules; // Semester schedules per day
     vector<string> daysOfWeek = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+
+    // Group courses by semester
+    map<int, vector<Course*>> coursesBySemester;
+    for (Course& course : allCourses) {
+        for (int semesterId = 0; semesterId < semesters.size(); ++semesterId) {
+            const vector<Course>& semesterCourses = semesters[semesterId].getCourses();
+            if (find_if(semesterCourses.begin(), semesterCourses.end(), [&course](const Course& c) { return c.getId() == course.getId(); }) != semesterCourses.end()) {
+                coursesBySemester[semesterId].push_back(&course);
+                break;
+            }
+        }
+    }
 
     for (Professor& professor : professors) {
         vector<string> professorCourses = professor.getCourseCodes();
@@ -59,7 +71,13 @@ void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses,
 
             int requiredHours = course->getTeachinHours();
             int remainingHours = requiredHours;
-            int semester = semester;
+            int semesterId = -1;
+            for (const auto& [id, courses] : coursesBySemester) {
+                if (find(courses.begin(), courses.end(), course) != courses.end()) {
+                    semesterId = id;
+                    break;
+                }
+            }
 
             // Split hours into lab and lecture
             bool isLabCourse = course->isLabCourse();
@@ -92,20 +110,29 @@ void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses,
                         int lectureSlotLength = min(lectureHours, availableSlot.end - availableSlot.start);
                         TimeSlot lectureSlot = {availableSlot.start, availableSlot.start + lectureSlotLength};
 
-                        // Check availability for lecture rooms
+                        // Check availability for lecture rooms and semester overlap
                         for (LectureRoom& room : lectureRooms) {
                             bool roomAvailable = true;
+                            bool semesterAvailable = true;
+
                             for (const TimeSlot& roomSlot : roomSchedules[room.getRoomName()]) {
                                 if (!(lectureSlot.end <= roomSlot.start || lectureSlot.start >= roomSlot.end)) {
                                     roomAvailable = false;
                                     break;
                                 }
                             }
-                            if (roomAvailable) {
+                            for (const TimeSlot& semesterSlot : semesterSchedules[semesterId][day]) {
+                                if (!(lectureSlot.end <= semesterSlot.start || lectureSlot.start >= semesterSlot.end)) {
+                                    semesterAvailable = false;
+                                    break;
+                                }
+                            }
+                            if (roomAvailable && semesterAvailable) {
                                 Assignment lectureAssignment = {room.getRoomName(), *course, lectureSlot};
                                 weeklySchedule[day][professor.getProfessorName()].push_back(lectureAssignment);
                                 roomSchedules[room.getRoomName()].push_back(lectureSlot);
                                 professorSchedules[professor.getProfessorName()][day].push_back(lectureSlot);
+                                semesterSchedules[semesterId][day].push_back(lectureSlot);
 
                                 lectureHours -= lectureSlotLength;
                                 remainingHours -= lectureSlotLength;
@@ -120,20 +147,29 @@ void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses,
                         int labSlotLength = min(labHours, availableSlot.end - availableSlot.start);
                         TimeSlot labSlot = {availableSlot.start, availableSlot.start + labSlotLength};
 
-                        // Check availability for laboratory rooms
+                        // Check availability for laboratory rooms and semester overlap
                         for (Laboratory& room : labRooms) {
                             bool roomAvailable = true;
+                            bool semesterAvailable = true;
+
                             for (const TimeSlot& roomSlot : roomSchedules[room.getRoomName()]) {
                                 if (!(labSlot.end <= roomSlot.start || labSlot.start >= roomSlot.end)) {
                                     roomAvailable = false;
                                     break;
                                 }
                             }
-                            if (roomAvailable) {
+                            for (const TimeSlot& semesterSlot : semesterSchedules[semesterId][day]) {
+                                if (!(labSlot.end <= semesterSlot.start || labSlot.start >= semesterSlot.end)) {
+                                    semesterAvailable = false;
+                                    break;
+                                }
+                            }
+                            if (roomAvailable && semesterAvailable) {
                                 Assignment labAssignment = {room.getRoomName(), *course, labSlot};
                                 weeklySchedule[day][professor.getProfessorName()].push_back(labAssignment);
                                 roomSchedules[room.getRoomName()].push_back(labSlot);
                                 professorSchedules[professor.getProfessorName()][day].push_back(labSlot);
+                                semesterSchedules[semesterId][day].push_back(labSlot);
 
                                 labHours -= labSlotLength;
                                 remainingHours -= labSlotLength;
@@ -164,7 +200,6 @@ void generateSchedule(vector<Professor>& professors, vector<Course>& allCourses,
         }
     }
 }
-
 
 int main() {
     cout << "Starting Timetable Generator..." << endl;
@@ -199,7 +234,6 @@ int main() {
     vector<pair<int, int>> unavailability4 = {{9, 20}, {9, 20}, {9, 20}, {9, 10}, {9, 10}};
     vector<pair<int, int>> unavailability5 = {{9, 15}, {9, 20}, {9, 20}, {9, 10}, {9, 10}};
     vector<pair<int, int>> unavailability6 = {{9, 9}, {9, 20}, {9, 20}, {9, 20}, {9, 9}};
-
 
 
     // Professor 1
@@ -248,7 +282,7 @@ int main() {
     }
 
     // Generate and print the weekly schedule
-    generateSchedule(professors, allCourses, lectureRooms, laboratories);
+    generateSchedule(professors, semesters, allCourses, lectureRooms, laboratories);
 
     cout << "Timetable generation completed." << endl;
 
