@@ -5,7 +5,7 @@ Professor::Professor() {}
 Professor::Professor(string ProfessorName, vector<string> coursesCodes, const vector<pair<int, int>>& unavailability) {
     this->ProfessorName = ProfessorName;
     this->coursesCodes = coursesCodes;
-    this->unavailability = unavailability; // Use vector assignment
+    this->unavailability = unavailability;
 }
 
 string Professor::getProfessorName() const {
@@ -17,7 +17,7 @@ vector<string> Professor::getCourseCodes() const {
 }
 
 vector<pair<int, int>> Professor::getunavailability() const {
-    return unavailability; // Return the vector directly
+    return unavailability; 
 }
 
 void Professor::assignCourse(string courseId) {

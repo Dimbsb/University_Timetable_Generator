@@ -43,3 +43,11 @@ string Course::getType() const {
 int Course::getTeachinHours() const {
     return TeachingHours;
 }
+
+bool Course::isLabCourse() const{
+return isLab;
+}
+
+bool Course::isLectureCourse() const{
+return isLecture;
+}

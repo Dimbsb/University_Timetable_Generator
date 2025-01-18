@@ -1,8 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <map>
-#include <algorithm>
 #include "Professor.h"
 #include "Semester.h"
 #include "Course.h"
@@ -10,6 +5,11 @@
 #include "Laboratory.h"
 #include "LectureRoom.h"
 
+#include <iostream>
+#include <vector>
+#include <string>
+#include <map>
+#include <algorithm>
 using namespace std;
 
 struct TimeSlot {
@@ -227,51 +227,27 @@ int main() {
     laboratories.push_back(Laboratory("Lab205", "Building B", 25, "Computer Lab5"));
     laboratories.push_back(Laboratory("Lab206", "Building C", 20, "Computer Lab6"));
 
-    // Define unavailability
-    vector<pair<int, int>> unavailability1 = {{9, 9}, {9, 9}, {9, 10}, {9, 20}, {9, 20}};
-    vector<pair<int, int>> unavailability2 = {{9, 20}, {9, 20}, {9, 10}, {9, 20}, {9, 9}};
-    vector<pair<int, int>> unavailability3 = {{9, 10}, {9, 10}, {9, 20}, {9, 10}, {9, 10}};
-    vector<pair<int, int>> unavailability4 = {{9, 20}, {9, 20}, {9, 20}, {9, 10}, {9, 10}};
-    vector<pair<int, int>> unavailability5 = {{9, 15}, {9, 20}, {9, 20}, {9, 10}, {9, 10}};
-    vector<pair<int, int>> unavailability6 = {{9, 9}, {9, 20}, {9, 20}, {9, 20}, {9, 9}};
-
-
     // Professor 1
-    vector<string> courses1 = {"MK1", "MK2"};
+    vector<pair<int, int>> unavailability1 = {{9, 9}, {9, 9}, {9, 10}, {9, 20}, {9, 20}};
+    vector<string> courses1 = {"Y1", "YYH1"};
     Professor professor1("EceTeacher-1", courses1, unavailability1);
-    semesters[0].assignProfessorToCourse("MK1", professor1);
-    semesters[0].assignProfessorToCourse("MK2", professor1);
+    semesters[6].assignProfessorToCourse("Y1", professor1);
+    semesters[6].assignProfessorToCourse("YYH1", professor1);
     professors.push_back(professor1);
 
     // Professor 2
-    vector<string> courses2 = {"MK7"};
+    vector<pair<int, int>> unavailability2 = {{9, 20}, {9, 20}, {9, 10}, {9, 20}, {9, 9}};
+    vector<string> courses2 = {"Y2"};
     Professor professor2("EceTeacher-2", courses2, unavailability2);
-    semesters[0].assignProfessorToCourse("MK7", professor2);
+    semesters[6].assignProfessorToCourse("Y2", professor2);
     professors.push_back(professor2);
 
     // Professor 3
-    vector<string> courses3 = {"MKH2"};
+    vector<pair<int, int>> unavailability3 = {{9, 10}, {9, 10}, {9, 20}, {9, 10}, {9, 10}};
+    vector<string> courses3 = {"YEH1"};
     Professor professor3("EceTeacher-3", courses3, unavailability3);
-    semesters[0].assignProfessorToCourse("MKH2", professor3);
+    semesters[6].assignProfessorToCourse("MKH7", professor3);
     professors.push_back(professor3);
-
-    // Professor 4
-    vector<string> courses4 = {"MKH3"};
-    Professor professor4("EceTeacher-4", courses4, unavailability4);
-    semesters[0].assignProfessorToCourse("MKH3", professor4);
-    professors.push_back(professor4);
-
-    // Professor 5
-    vector<string> courses5 = {"MK4-H"};
-    Professor professor5("EceTeacher-4", courses5, unavailability5);
-    semesters[0].assignProfessorToCourse("MK4-H", professor5);
-    professors.push_back(professor5);
-
-    // Professor 6
-    vector<string> courses6 = {"MK9"};
-    Professor professor6("EceTeacher-4", courses6, unavailability6);
-    semesters[0].assignProfessorToCourse("MK9", professor6);
-    professors.push_back(professor6);
 
 
     // Retrieve courses from semesters
